@@ -1,4 +1,3 @@
-/// <reference path="_all.ts" />
 import {module} from 'angular';
 
 /**

@@ -3,51 +3,48 @@
 const gulp      = require('gulp');
 const clean     = require('gulp-clean');
 const ts        = require('gulp-typescript');
-const merge     = require('merge-stream')
+const merge     = require('merge-stream');
 const concat    = require('gulp-concat');
 const cssmin    = require('gulp-cssmin');
 const rename    = require('gulp-rename');
 const bs        = require('browser-sync');
+const bsrfy     = require('gulp-browserify');
 
 const tsProject = ts.createProject({
     declaration: true,
     noImplicitAny: true
-
 });
 
 const APPROOT = 'app/';
 const SRCROOT = 'src/';
 
 const SRCPATH = {
-    html: SRCROOT + 'views/',
     css: {
         app: [SRCROOT + 'css/'],
         bootstrap: ['./node_modules/bootstrap/dist/css/']
     },
-    ts: [
-        SRCROOT,
-        SRCROOT + 'config/',
-        SRCROOT + 'controllers/',
-        SRCROOT + 'directives/',
-        SRCROOT + 'filters/',
-        SRCROOT + 'interceptors/',
-        SRCROOT + 'services/'
-    ]
+    libs: ['./node_modules/angular/angular.js']
 
 };
 
 const APPPATH = {
-    js: APPROOT + 'js/',
+    libs: APPROOT + 'libs/',
     css: APPROOT + 'css/'
 };
 
 gulp.task('html', ['clean-html'], function () {
-    return gulp.src(SRCPATH.html + '*.html')
-        .pipe(gulp.dest(APPROOT));
+    return gulp.src([
+        SRCROOT + '*.html',
+        SRCROOT + '**/views/*.html'
+    ], {base: 'src/'})
+    .pipe(gulp.dest(APPROOT));
 });
 
 gulp.task('clean-html', function () {
-    return gulp.src(APPROOT + '*.html', {
+    return gulp.src([
+        APPROOT + '*.html',
+        APPROOT + '**/views/*.html'
+    ], {
        read: false,
        force: true
     }).pipe(clean());
@@ -69,19 +66,45 @@ gulp.task('css-min', function () {
 });
 
 gulp.task('ts-output', function () {
-    var src = SRCPATH.ts.map(function (t) { return t + '*.ts' });
+    var tsResult =  gulp.src([
+        SRCROOT + '*.ts',
+        SRCROOT + '**/**/*.ts'
+    ], {
+        base: 'src/'
+    }).pipe(tsProject());
 
-    var tsResult =  gulp.src(src)
-        .pipe(tsProject());
-
-    return tsResult.js.pipe(gulp.dest(APPPATH.js))
+    return tsResult.js.pipe(gulp.dest(APPROOT));
 });
 
-gulp.task('watch', ['html', 'ts-output', 'css-min'], function () {
-    gulp.watch([SRCPATH.html + '*.html'], ['html']);
-    gulp.watch([SRCPATH.ts + '*.ts'], ['ts-output']);
+gulp.task('scripts', function () {
+    gulp.src(SRCPATH.libs)
+        .pipe(concat('main.js'))
+        .pipe(bsrfy())
+        .pipe(gulp.dest(APPPATH.libs));
+});
+
+gulp.task('serve', function () {
+    bs.init([
+        APPROOT + '*.js',
+        APPROOT + '**/views/*.html',
+        APPROOT + '**/**/*.js',
+        APPPATH.libs + '*.js',
+        APPPATH.css + ' *.css'
+    ], { server: { baseDir: APPROOT }});
+});
+
+gulp.task('watch', [
+    'html',
+    'ts-output',
+    'css-min',
+    'scripts',
+    'serve'
+], function () {
+    gulp.watch([SRCROOT + '*.html', SRCROOT + '**/views/*.html'], ['html']);
+    gulp.watch([SRCROOT + '*.ts', SRCROOT + '**/**/*.ts'], ['ts-output']);
     gulp.watch([SRCPATH.css + '*.css'], ['css-min']);
+    gulp.watch([SRCPATH.libs], ['scripts']);
 });
 
-gulp.task('default', ['html', 'ts-output', 'css-min']);
+gulp.task('default', ['html', 'ts-output', 'css-min', 'scripts']);
 gulp.task('dev', ['watch']);
