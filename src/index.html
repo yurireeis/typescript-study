@@ -1,14 +1,48 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<html ng-app="phoneBook">
 <head>
     <meta charset="UTF-8">
-    <title>TypeScript Study</title>
-    <link rel="./node_modules/bootstrap/dist/css/app.min.css">
+    <title>Aveso Project</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/app.min.css">
 </head>
 <body>
-    <div class="container">
-        <h2>Olá mundo!</h2>
+
+<div ng-show="loading">
+    <div class="jumbotron">
+        <h5>Carregando... Por favor aguarde</h5>
     </div>
-    <script src="libs/main.js"></script>
+</div>
+
+<div ng-hide="loading">
+    <div ng-view></div>
+    <div ng-include="'view/footer.html'"></div>
+</div>
+
+<script
+        src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+        integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+        crossorigin="anonymous">
+</script>
+<script src="libs/main.js"></script>
+<script src="libs/internal.js"></script>
+<script src="js/app.js"></script>
+<script src="lib/ui/uiAccordeon.js"></script>
+<script src="js/controllers/newContactCtrl.js"></script>
+<script src="js/controllers/listContactCtrl.js"></script>
+<script src="js/controllers/contactDetailsCtrl.js"></script>
+<script src="js/controllers/loginCtrl.js"></script>
+<script src="js/services/contactsAPIService.js"></script>
+<script src="js/services/carriersAPIService.js"></script>
+<script src="js/config/serialGeneratorConfig.js"></script>
+<script src="js/value/configValue.js"></script>
+<script src="js/filters/nameFilter.js"></script>
+<script src="js/filters/ellipsisFilter.js"></script>
+<script src="lib/ui/uiAlertDirective.js"></script>
+<script src="js/config/routeConfig.js"></script>
+<script src="js/interceptors/timestampInterceptor.js"></script>
+<script src="js/interceptors/errorInterceptor.js"></script>
+<script src="js/interceptors/loadingInterceptor.js"></script>
+<script src="js/config/interceptorConfig.js"></script>
+
 </body>
 </html>

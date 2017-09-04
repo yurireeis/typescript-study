@@ -15,6 +15,11 @@ const tsProject = ts.createProject({
     noImplicitAny: true
 });
 
+const tsProject2 = ts.createProject({
+    declaration: true,
+    noImplicitAny: true
+});
+
 const APPROOT = 'app/';
 const SRCROOT = 'src/';
 
@@ -23,8 +28,13 @@ const SRCPATH = {
         app: [SRCROOT + 'css/'],
         bootstrap: ['./node_modules/bootstrap/dist/css/']
     },
-    libs: ['./node_modules/angular/angular.js']
-
+    libs: SRCROOT + 'lib/',
+    externalLibs: [
+        './node_modules/angular/angular.js',
+        './node_modules/angular-route/angular-route.js',
+        './node_modules/angular-messages/angular-messages.js',
+        './node_modules/angular-locale-pt-br/angular-locale_pt-br.js'
+    ]
 };
 
 const APPPATH = {
@@ -35,7 +45,7 @@ const APPPATH = {
 gulp.task('html', ['clean-html'], function () {
     return gulp.src([
         SRCROOT + '*.html',
-        SRCROOT + '**/views/*.html'
+        SRCROOT + 'view/*.html'
     ], {base: 'src/'})
     .pipe(gulp.dest(APPROOT));
 });
@@ -51,24 +61,25 @@ gulp.task('clean-html', function () {
 });
 
 gulp.task('css-min', function () {
-    var cssSRC = [];
-
-    SRCPATH.css.app.map(function (t) { cssSRC.push(t + '*.css') });
-    SRCPATH.css.bootstrap.map(function (t) { cssSRC.push(t + '*.css') });
-
-    var css = gulp.src(cssSRC);
+  
+    var css = gulp.src([
+      SRCPATH.css.app + '*.css',
+      SRCPATH.css.bootstrap + '*.css',
+    ]);
 
     return merge(css)
         .pipe(concat('app.css'))
         .pipe(cssmin())
         .pipe(rename({suffix: '.min'}))
         .pipe(gulp.dest(APPPATH.css));
+
 });
 
 gulp.task('ts-output', function () {
     var tsResult =  gulp.src([
         SRCROOT + '*.ts',
-        SRCROOT + '**/**/*.ts'
+        SRCROOT + '**/**/*.ts',
+        SRCROOT + '**/*.ts'
     ], {
         base: 'src/'
     }).pipe(tsProject());
@@ -77,17 +88,25 @@ gulp.task('ts-output', function () {
 });
 
 gulp.task('scripts', function () {
-    gulp.src(SRCPATH.libs)
+    gulp.src(SRCPATH.externalLibs)
         .pipe(concat('main.js'))
         .pipe(bsrfy())
         .pipe(gulp.dest(APPPATH.libs));
+
+    gulp.src([SRCPATH.libs + '**/*.ts'])
+      .pipe(tsProject2())
+      .pipe(concat('internal.js'))
+      .pipe(bsrfy())
+      .pipe(gulp.dest(APPPATH.libs));
+
 });
 
 gulp.task('serve', function () {
     bs.init([
         APPROOT + '*.js',
-        APPROOT + '**/views/*.html',
+        APPROOT + '**/view/*.html',
         APPROOT + '**/**/*.js',
+        APPROOT + '**/*.js',
         APPPATH.libs + '*.js',
         APPPATH.css + ' *.css'
     ], { server: { baseDir: APPROOT }});
@@ -100,10 +119,10 @@ gulp.task('watch', [
     'scripts',
     'serve'
 ], function () {
-    gulp.watch([SRCROOT + '*.html', SRCROOT + '**/views/*.html'], ['html']);
+    gulp.watch([SRCROOT + '*.html', SRCROOT + '**/view/*.html'], ['html']);
     gulp.watch([SRCROOT + '*.ts', SRCROOT + '**/**/*.ts'], ['ts-output']);
     gulp.watch([SRCPATH.css + '*.css'], ['css-min']);
-    gulp.watch([SRCPATH.libs], ['scripts']);
+    gulp.watch([SRCPATH.externalLibs, SRCPATH.libs], ['scripts']);
 });
 
 gulp.task('default', ['html', 'ts-output', 'css-min', 'scripts']);
