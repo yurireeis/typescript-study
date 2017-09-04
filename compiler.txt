@@ -1,0 +1,7 @@
+-- COMPILER OPTIONS
+
+noEmitOnError: don't create js file if you get an error on compilation
+sourceMap: if is activated, you can debug your ts file on browser
+noImplicitAny: set to true if you want to disable compilation if var has implicit any
+strictNullChecks: if is settled true, checks if a variable is used before being assigned
+noUnusedParameters: if true, don't compile if you have an unused parameter

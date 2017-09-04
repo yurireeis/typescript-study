@@ -1,0 +1,81 @@
+-- var, let & const
+var: used to global scope
+let: used to local scope (unless is exported)
+const: used to local scope (unless is exported) and cant change their value
+
+-- block scope
+let variable: string = "test";
+
+function reset(): void {
+  let variable: null = null;
+  console.log(variable);
+}
+
+reset(); // variable will print null
+console.log(variable); // variable will print test
+
+-- ARROW function
+// a function that you cant set inlineSources
+let multiply = (num1: number, num2: number): number => num1 * num2;
+
+// you can set arrow function without parameters too
+let sayHi = () => console.log("Hi!");
+
+-- DEFAULT PARAMETERS
+// look at the parameter start. It's equals to 10 as default
+const countdown = (start: number = 10): void => {
+  while (start > 0) {
+    start--;
+  }
+  console.log("Done! ", start);
+};
+
+countdown();
+
+// if you wanna to override the value, you can also
+countdown(20);
+
+-- SPREAD OPERATOR
+// its like pass * with a list in python, but with 3 dots
+// get a list and unpack all values
+const numbers: number[] = [4, 11, 7, 9];
+
+// will pass all numbers individualy
+console.log(Math.max(...numbers));
+
+-- REST OPERADOR
+// its like variadic functions in python, passing three dots in parameters
+// collect all passed values and create a list
+
+// in this case will return a list of numbers
+const showNumbers = (...numbers: number): number[] => return numbers;
+
+-- DESTRUCTURING ARRAYS
+// one more like's pythonic way
+const myHobbies = ['Play', 'Eat'];
+const [hobby1, hobby2] = myHobbies;
+
+// unpack list values into separated vars
+console.log('I like to ' + hobby1 + ' and ' + hobby2);
+
+
+-- DESTRUCTURING OBJECTS
+// works in the same way of DESTRUCTURING ARRAYS, but with curly braces
+const myData: {name: string, age: number} = {
+  name: "Yuri",
+  age: 30
+}
+
+// key name of the object must match
+const {name, age} = myData;
+console.log("My name is " + name + " and my age is " + age);
+
+// you can set an alias if you prefer
+const {name: myName, age: myAge} = myData;
+console.log("My name is " + myName + " and my age is " + myAge);
+
+
+-- TEMPLATE LITERALS
+// SOO pythonic! You can parse variables into the string using ``
+// multi-line string respects breaklines too!
+console.log(`Hello! My name is ${myName} and my age is ${myAge}.`);

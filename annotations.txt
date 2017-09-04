@@ -1,0 +1,122 @@
+// commands:
+
+tsc --init : create a new tsconfig.json file filled with comments for each
+  configurations. (you need typescript npm dependency installed globally)
+
+// ts
+
+-- TIPS
+
+/**
+
+ ** you don't need to type primitive variables.
+    (the variable above is a string - ts will understand)
+
+ ** number type will receive without errors float, integers and so on
+    (let myAge = 18;)
+
+ ** boolean type cannot cast automatically.
+    (let isTrue: boolean = 1; will not work!)
+
+ ** if you wanna go back to js world, just set ANY to all variables
+    (it's not a good practice)
+
+**/
+
+
+-- CREATE VARIABLES
+// let : create a variable (let myName = 'Yuri';)
+let name: string; // create a variable with a type and without a initial value.
+
+-- ARRAYS
+let hobbies = ['play', 'paint']
+hobbies = [10]; // will raise an error
+// if you wanna play in js mode set: let hobbies: any[];
+
+-- TUPLES
+let address: [string, number] = ["Minha rua", 300];
+// the order is important in tuples
+
+-- ENUMS
+// a way to create types
+enum Color {
+  blue,
+  red,
+  black
+}
+
+let MyColor: Color = Color.blue; // will print 0 (the blue position)
+
+-- FUNCTIONS
+function sayMyName(name: string): string {
+  // the left type refers to parameter and the second to return type
+  return name;
+}
+
+function makeSomething(): void {
+  // void means will return nothing
+  console.log("Make Something!");
+}
+
+-- FUNCTION TYPES
+let sayNameType: (a: string) => string;
+// will work because parameters and return type will fit
+sayNameType = sayMyName;
+
+// will raise an error (makeSomething returns nothing and take no parameters)
+sayMyName = makeSomething;
+
+-- OBJECTS
+// to set object properties types use curly braces
+let userData: {name: string, age: number} = { // after equals come the real object
+  name: "Yuri",
+  age: 30
+};
+
+-- COMPLEX OBJECT EXAMPLE
+/*
+ ** this function request data as array of numbers
+ ** and a output function with a boolean parameter that should return an array of numbers
+*/
+let complex: {data: number[], output: (all: boolean) => number[]} = {
+  data: number[10, 33, 99],
+  output: function (all: boolean): number[] {
+    return this.data;
+  }
+};
+
+-- USING TYPE ALIAS
+// with this if you want to chance the type properties you can change in one place
+type Complex = {data: number[], output: (all: boolean) => number[]};
+
+let complex2: Complex = {
+  data: [100, 41, 12],
+  output: function (all: boolean): number[] {
+    return this.data;
+  }
+};
+
+-- UNION TYPES
+// chain more than two types
+let myRealAge: number | string = 27;
+myRealAge = '27';
+
+-- CHECK TYPES
+let finalValue = "A string";
+
+// in comparation the type name comes with quotes
+if (typeof finalValue == "string") console.log("final value is a string");
+
+-- NEVER (TS 2.0)
+// this function won't return nothing neither void anything
+function neverReturnsOrVoid(): never {
+  throw new Error('An error!');
+}
+
+-- NULLABLE TYPES
+let canBeNull = 12;
+// ts will accept this, unless you settled strictNullChecks to true in tsconfig.json
+canBeNull = null;
+
+lat canAlsoBeNull: number | null;
+canAlsoBeNull = null;

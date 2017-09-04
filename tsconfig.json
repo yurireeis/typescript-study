@@ -5,6 +5,10 @@
     "allowJs": true,                     /* Allow javascript files to be compiled. */
     "sourceMap": false,                     /* Generates corresponding '.map' file. */
     "noImplicitAny": false,
+    "strictNullChecks": true,
+    "noEmitOnError": true,
+    "strictNullChecks": true,
+    "noUnusedParameters": true
     },                /* Raise error on expressions and declarations with an implied 'any' type. */
     "exclude": [
       "node_modules"
