@@ -10,12 +10,8 @@ const rename    = require('gulp-rename');
 const bs        = require('browser-sync');
 const bsrfy     = require('gulp-browserify');
 
-const tsProject = ts.createProject({
-    declaration: true,
-    noImplicitAny: true
-});
-
-const tsProject2 = ts.createProject({
+const tsProject = ts.createProject('tsconfig.json');
+const tsProject2 = ts.createProject('tsconfig.json', {
     declaration: true,
     noImplicitAny: true
 });
@@ -61,7 +57,7 @@ gulp.task('clean-html', function () {
 });
 
 gulp.task('css-min', function () {
-  
+
     var css = gulp.src([
       SRCPATH.css.app + '*.css',
       SRCPATH.css.bootstrap + '*.css',
