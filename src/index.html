@@ -23,8 +23,16 @@
         integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
         crossorigin="anonymous">
 </script>
-<script src="libs/main.js"></script>
-<script src="libs/internal.js"></script>
+<script src="lib/main.js"></script>
+<script src="lib/internal.js"></script>
+<script>
+  // set your base url reference path
+  SystemJS.config({
+    baseURL: '/',
+    defaultJSExtensions: true
+  });
+  SystemJS.import('js/app.js');
+</script>
 <script src="js/app.js"></script>
 <script src="lib/ui/uiAccordeon.js"></script>
 <script src="js/controllers/newContactCtrl.js"></script>

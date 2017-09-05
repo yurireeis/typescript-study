@@ -26,6 +26,7 @@ const SRCPATH = {
     },
     libs: SRCROOT + 'lib/',
     externalLibs: [
+        './node_modules/systemjs/dist/system.js',
         './node_modules/angular/angular.js',
         './node_modules/angular-route/angular-route.js',
         './node_modules/angular-messages/angular-messages.js',
@@ -34,7 +35,7 @@ const SRCPATH = {
 };
 
 const APPPATH = {
-    libs: APPROOT + 'libs/',
+    libs: APPROOT + 'lib/',
     css: APPROOT + 'css/'
 };
 

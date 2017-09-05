@@ -39,6 +39,7 @@
     "gulp-concat": "^2.6.1",
     "gulp-cssmin": "^0.2.0",
     "gulp-rename": "^1.2.2",
-    "merge-stream": "^1.0.1"
+    "merge-stream": "^1.0.1",
+    "systemjs": "^0.20.18"
   }
 }
